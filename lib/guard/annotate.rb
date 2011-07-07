@@ -57,12 +57,12 @@ module Guard
     def run_annotate
       UI.info 'Running annotate', :reset => true
       started_at = Time.now
-      @result = system("annotate #{annotate_tests_flags} -p #{annotation_position}")
+      @result = system("bundle exec annotate #{annotate_tests_flags} -p #{annotation_position}")
       Notifier::notify( @result, Time.now - started_at ) if notify?
 
       if annotate_routes?
         started_at = Time.now
-        @result = system("annotate -r")
+        @result = system("bundle exec annotate -r")
         Notifier::notify( @result, Time.now - started_at ) if notify?
       end
       
