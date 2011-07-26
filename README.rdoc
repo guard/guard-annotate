@@ -33,7 +33,7 @@ Please read the {Guard usage docs}[https://github.com/guard/guard#readme]
       # a model file changes
       #watch( 'app/models/**/*.rb' )
     end
-    
+
 
 == Options
 
@@ -48,16 +48,22 @@ You can customize the placement of the annotations with (default is 'before'):
     guard 'annotate', :position => 'before|after' do
       ...
     end
-    
+
 You can choose to also annotate your routes file with (default is false):
-    
+
     guard 'annotate', :routes => true do
       ...
     end
-    
+
 You can annotate your tests and fixtures files with (default is false):
 
     guard 'annotate', :tests => true do
+      ...
+    end
+
+You can disable run at start with (default is true):
+
+    guard 'annotate', :run_at_start => false do
       ...
     end
 
