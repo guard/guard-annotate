@@ -67,6 +67,12 @@ You can disable run at start with (default is true):
       ...
     end
 
+You can annotate indexes on your models with (default is false):
+
+    guard 'annotate', :show_indexes => true
+      ...
+    end
+
 == Development
 
 - Source hosed at {GitHub}[https://github.com/cpjolicoeur/guard-annotate]

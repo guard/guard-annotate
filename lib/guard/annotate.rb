@@ -15,6 +15,7 @@ module Guard
       options[:tests] = false if options[:tests].nil?
       options[:routes] = false if options[:routes].nil?
       options[:run_at_start] = true if options[:run_at_start].nil?
+      options[:show_indexes] = false if options[:show_indexes].nil?
     end
 
     def start
@@ -55,15 +56,21 @@ module Guard
       options[:tests] ? "" : "--exclude tests,fixtures"
     end
 
+    def show_indexes?
+      options[:show_indexes]
+    end
+
     def run_annotate
       UI.info 'Running annotate', :reset => true
       started_at = Time.now
-      @result = system("bundle exec annotate #{annotate_tests_flags} -p #{annotation_position}")
+      annotate_models_command = "bundle exec annotate #{annotate_tests_flags} -p #{annotation_position}"
+      annotate_models_command += " --show-indexes" if show_indexes?
+      @result = system(annotate_models_command)
       Notifier::notify( @result, Time.now - started_at ) if notify?
 
       if annotate_routes?
         started_at = Time.now
-        @result = system("bundle exec annotate -r")
+        @result = system("bundle exec annotate -r -p #{annotation_position}")
         Notifier::notify( @result, Time.now - started_at ) if notify?
       end
 
