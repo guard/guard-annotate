@@ -27,7 +27,7 @@ module Guard
     end
 
     def reload
-      run_annotate
+      run_annotate if options[:run_at_start]
     end
 
     def run_all

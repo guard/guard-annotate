@@ -13,7 +13,9 @@ describe Guard::Annotate do
         subject = Guard::Annotate.new( [], :notify => false )
         subject.options[:notify].should be_false
       end
+    end
 
+    describe "position" do
       it "should use 'before' position by default" do
         subject.options[:position].should == 'before'
       end
@@ -31,56 +33,67 @@ describe Guard::Annotate do
         subject.should_receive(:system).with("bundle exec annotate --exclude tests,fixtures -p after")
         subject.start
       end
+    end
 
-      describe "routes" do
-        it "should not run routes by default" do
-          subject.options[:routes].should be_false
-        end
-
-        it "should allow the users to run routes if desired" do
-          subject = Guard::Annotate.new( [], :routes => true)
-          subject.should_receive(:system).with("bundle exec annotate --exclude tests,fixtures -p before")
-          subject.should_receive(:system).with("bundle exec annotate -r -p before")
-          subject.start
-        end
-
-        it "should allow the user to customize routes annotation position (before)" do
-          subject = Guard::Annotate.new( [], :routes => true, :position => 'before')
-          subject.should_receive(:system).with("bundle exec annotate --exclude tests,fixtures -p before")
-          subject.should_receive(:system).with("bundle exec annotate -r -p before")
-          subject.start
-        end
-
-        it "should allow the user to customize routes annotation position (after)" do
-          subject = Guard::Annotate.new( [], :routes => true, :position => 'after')
-          subject.should_receive(:system).with("bundle exec annotate --exclude tests,fixtures -p after")
-          subject.should_receive(:system).with("bundle exec annotate -r -p after")
-          subject.start
-        end
+    describe "routes" do
+      it "should not run routes by default" do
+        subject.options[:routes].should be_false
       end
 
-      describe "tests & fixtures" do
-        it "should not run tests annotations by default" do
-          subject.options[:tests].should be_false
-        end
-
-        it "should allow user to run tests and fixtures annotations if desired" do
-          subject = Guard::Annotate.new( [], :tests => true )
-          subject.should_receive(:system).with("bundle exec annotate  -p before")
-          subject.start
-        end
+      it "should allow the users to run routes if desired" do
+        subject = Guard::Annotate.new( [], :routes => true)
+        subject.should_receive(:system).with("bundle exec annotate --exclude tests,fixtures -p before")
+        subject.should_receive(:system).with("bundle exec annotate -r -p before")
+        subject.start
       end
 
-      describe "indexes" do
-        it "should not add indexes to annotations by default" do
-          subject.options[:show_indexes].should be_false
-        end
+      it "should allow the user to customize routes annotation position (before)" do
+        subject = Guard::Annotate.new( [], :routes => true, :position => 'before')
+        subject.should_receive(:system).with("bundle exec annotate --exclude tests,fixtures -p before")
+        subject.should_receive(:system).with("bundle exec annotate -r -p before")
+        subject.start
+      end
 
-        it "should allow user to add indexes to annotations if desired" do
-          subject = Guard::Annotate.new( [], :show_indexes => true )
-          subject.should_receive(:system).with("bundle exec annotate --exclude tests,fixtures -p before --show-indexes")
-          subject.start
-        end
+      it "should allow the user to customize routes annotation position (after)" do
+        subject = Guard::Annotate.new( [], :routes => true, :position => 'after')
+        subject.should_receive(:system).with("bundle exec annotate --exclude tests,fixtures -p after")
+        subject.should_receive(:system).with("bundle exec annotate -r -p after")
+        subject.start
+      end
+    end
+
+    describe "tests & fixtures" do
+      it "should not run tests annotations by default" do
+        subject.options[:tests].should be_false
+      end
+
+      it "should allow user to run tests and fixtures annotations if desired" do
+        subject = Guard::Annotate.new( [], :tests => true )
+        subject.should_receive(:system).with("bundle exec annotate  -p before")
+        subject.start
+      end
+    end
+
+    describe "indexes" do
+      it "should not add indexes to annotations by default" do
+        subject.options[:show_indexes].should be_false
+      end
+
+      it "should allow user to add indexes to annotations if desired" do
+        subject = Guard::Annotate.new( [], :show_indexes => true )
+        subject.should_receive(:system).with("bundle exec annotate --exclude tests,fixtures -p before --show-indexes")
+        subject.start
+      end
+    end
+    
+    describe "run_at_start" do
+      it "should run at start by default" do
+        subject.options[:run_at_start].should be_true
+      end
+
+      it "should allow user to opt out of running at start" do
+        subject = Guard::Annotate.new( [], :run_at_start => false)
+        subject.options[:run_at_start].should be_false
       end
     end
   end
@@ -109,12 +122,6 @@ describe Guard::Annotate do
     end
   end
 
-  context "run_all" do
-    it "should be a noop (return true)" do
-      subject.run_all.should be_true
-    end
-  end
-
   context "reload" do
     it "should run annotate command" do
       subject.should_receive(:system).with("bundle exec annotate --exclude tests,fixtures -p before")
@@ -124,6 +131,18 @@ describe Guard::Annotate do
     it "should return false if annotate command fails" do
       subject.should_receive(:system).with("bundle exec annotate --exclude tests,fixtures -p before").and_return(false)
       subject.reload.should be_false
+    end
+
+    it 'should not run annotate command if disabled :run_at_start' do
+      subject.should_not_receive(:system)
+      subject.options[:run_at_start] = false
+      subject.reload
+    end
+  end
+
+  context "run_all" do
+    it "should be a noop (return true)" do
+      subject.run_all.should be_true
     end
   end
 
