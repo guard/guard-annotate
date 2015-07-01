@@ -13,14 +13,17 @@ Gem::Specification.new do |s|
   s.description = %q{Guard::Annotate automatically runs the annotate gem when needed}
   s.license     = "MIT"
 
+  s.post_install_message = %Q(** guard-annotate is looking for maintainers. While I am still trying
+  to accept and stay on top of new Pull Requests, I no longer personally actively use this guard
+  plugin.  If you are interested in becoming a maintainer please contact me via GitHub Issues at
+  https://github.com/guard/guard-annotate. **)
+
   s.rubyforge_project = "guard-annotate"
 
-  s.add_dependency 'guard', '~> 2.0'
+  s.add_dependency 'guard-compat', '~> 1.2', '>= 1.2.1'
   s.add_dependency 'annotate', '~> 2.4', '>= 2.4.0'
 
-  s.add_development_dependency 'rspec', '~> 2.9.0'
-  s.add_development_dependency 'guard-rspec', '~> 0.6.0'
-  s.add_development_dependency 'rake', '~> 0.9.2.2'
+  s.add_development_dependency 'bundler', '~> 1.6'
 
   s.files = Dir.glob('{lib}/**/*') + %w[LICENSE README.rdoc]
   s.require_paths = ["lib"]

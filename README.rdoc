@@ -3,7 +3,7 @@
 Annotate guard runs the annotate gem when needed
 
 - Compatible with Annotate 2.4.x
-- Tested on Ruby 1.8.7, 1.9.2 & 1.9.3
+- Tested on Ruby 1.8.7, 1.9.x, 2.1.x
 
 == Install
 
@@ -58,6 +58,18 @@ You can choose to also annotate your routes file with true, false or 'before'/'a
 You can annotate your tests and fixtures files with (default is false):
 
     guard 'annotate', :tests => true do
+      ...
+    end
+
+You can exclude annotations in factory files with (default is true):
+
+    guard 'annotate', :factories => false do
+      ...
+    end
+
+You can exclude annotations in serializers with (default is true):
+
+    guard 'annotate', :serializers => false do
       ...
     end
 

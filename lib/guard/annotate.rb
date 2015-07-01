@@ -1,6 +1,5 @@
 # encoding: utf-8
-require 'guard'
-require 'guard/plugin'
+require 'guard/compat/plugin'
 require 'guard/annotate/version'
 
 module Guard
@@ -14,6 +13,8 @@ module Guard
       options[:notify] = true if options[:notify].nil?
       options[:position] = 'before' if options[:position].nil?
       options[:tests] = false if options[:tests].nil?
+      options[:factories] = true if options[:factories].nil?
+      options[:serializers] = true if options[:serializers].nil?
       options[:sort] = false if options[:sort].nil?
       options[:routes] = false if options[:routes].nil?
       options[:run_at_start] = true if options[:run_at_start].nil?
@@ -58,8 +59,13 @@ module Guard
       options[:routes]
     end
 
-    def annotate_tests_flags
-      options[:tests] ? '' : '--exclude tests,fixtures'
+    def annotate_excludes
+      excludes = []
+      excludes << 'tests' << 'fixtures' unless options[:tests]
+      excludes << 'factories' unless options[:factories]
+      excludes << 'serializers' unless options[:serializers]
+
+      excludes.empty? ? '' : "--exclude #{excludes.join(',')}"
     end
 
     def annotate_sort_columns?
@@ -87,11 +93,11 @@ module Guard
     end
 
     def run_annotate
-      UI.info 'Running annotate', :reset => true
+      Compat::UI.info 'Running annotate', :reset => true
       started_at = Time.now
       annotate_models_options, annotate_options = '', ''
 
-      annotate_models_command = "bundle exec annotate #{annotate_tests_flags} -p #{annotation_position}"
+      annotate_models_command = "bundle exec annotate #{annotate_excludes} -p #{annotation_position}"
       annotate_models_options += ' --sort' if annotate_sort_columns?
       annotate_models_options += ' --show-indexes' if show_indexes?
       annotate_models_options += ' --simple-indexes' if simple_indexes?

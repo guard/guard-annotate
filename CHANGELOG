@@ -1,3 +1,24 @@
+== 2.2 - 2015/05/21
+
+* Added support to turn off annotations for serializers and factories
+
+== 2.1 - 2015/01/16
+
+* Use guard-compat
+* Update rspec version and tests
+
+== 2.0.2 - 2014/11/20
+
+* bugfix release
+
+== 2.0.1 - 2014/11/15
+
+* bugfix release for guard/version issue
+
+== 2.0.0 - 2014/11/12
+
+* Updated gem to be compliant with Guard 2.x changes
+
 == 1.1.0 - 2013/04/18
 
 * Add more options to annotate command (show migration version, simple indexed, formatting)

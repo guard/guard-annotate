@@ -2,7 +2,7 @@
 module Guard
   class Annotate
     class Notifier
-      
+
       class << self
         def guard_message( result, duration )
           case result
@@ -12,19 +12,19 @@ module Guard
             "Annotate run has failed!\nPlease check manually."
           end
         end
-        
+
         def guard_image( result )
           result ? :success : :failed
         end
-        
+
         def notify( result, duration )
           message = guard_message( result, duration )
           image   = guard_image( result )
-          
-          ::Guard::Notifier.notify( message, :title => 'Annotate complete', :image => image )
-        end     
+
+          Compat::UI.notify( message, :title => 'Annotate complete', :image => image )
+        end
       end
-      
+
     end
   end
 end
