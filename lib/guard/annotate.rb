@@ -20,6 +20,7 @@ module Guard
       options[:run_at_start] = true if options[:run_at_start].nil?
       options[:show_indexes] = false if options[:show_indexes].nil?
       options[:simple_indexes] = false if options[:simple_indexes].nil?
+      options[:show_foreign_keys] = false if options[:show_foreign_keys].nil?
       options[:show_migration] = false if options[:show_migration].nil?
       options[:format] = nil if options[:format].nil? or not [:bare, :markdown, :rdoc].include? options[:format].to_sym
     end
@@ -91,6 +92,10 @@ module Guard
     def show_migration?
       options[:show_migration]
     end
+    
+    def show_foreign_keys?
+      options[:show_foreign_keys]
+    end
 
     def run_annotate
       Compat::UI.info 'Running annotate', :reset => true
@@ -102,6 +107,7 @@ module Guard
       annotate_models_options += ' --show-indexes' if show_indexes?
       annotate_models_options += ' --simple-indexes' if simple_indexes?
       annotate_models_options += ' --show-migration' if show_migration?
+      annotate_models_options += ' --show-foreign-keys' if show_foreign_keys?
       annotate_options += " --format=#{annotate_format}" if annotate_format?
 
       annotate_models_command += annotate_models_options + annotate_options
