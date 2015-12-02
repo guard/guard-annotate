@@ -141,6 +141,18 @@ RSpec.describe Guard::Annotate do
       end
     end
 
+    describe "foreign keys" do
+      it "should not add foreign keys to annotations by default" do
+        expect(subject.options[:show_foreign_keys]).to be_falsey
+      end
+
+      it "should allow user to add foreign keys to annotations if desired" do
+        subject = Guard::Annotate.new(:show_foreign_keys => true)
+        expect(subject).to receive(:system).with("bundle exec annotate --exclude tests,fixtures -p before --show-foreign-keys")
+        subject.start
+      end
+    end
+
     describe "show migration" do
       it "should not show migration version in annotations by default" do
         expect(subject.options[:show_migration]).to be_falsey
