@@ -121,7 +121,7 @@ module Guard
         else
           annotation_position
         end
-        annotate_routes_command = "bundle exec annotate -r -p #{position}"
+        annotate_routes_command = "bundle exec annotate #{annotate_excludes} -r -p #{position}"
 
         annotate_routes_command += annotate_options
         @result = system(annotate_routes_command)
